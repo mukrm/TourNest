@@ -1,0 +1,11 @@
+
+.daydiv{
+    margin: 5px;
+    padding: 5px;
+    background-color: #eef2f5;
+    border-radius: 15px;
+    width:99%;
+    margin-left: 7px;
+    overflow:auto;
+
+}
