@@ -1,0 +1,19 @@
+.history-card-container {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  background-color: rgb(225, 225, 225);
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border-radius: 10px;
+}
+
+.subtitle {
+  margin-top: 0.3em;
+  margin-bottom: 0.5em;
+}
+
+.subtitle {
+  color: rgb(108, 108, 108);
+}
