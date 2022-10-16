@@ -20,6 +20,7 @@ const Hotel = () => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [tour, setTour] = useState(location.state.tour);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   function next() {
     //alert(tour.title)
@@ -99,11 +100,13 @@ const Hotel = () => {
                 <b>{tour.price}</b> ({tour.days}) Days
               </h2>
               <button
-                onClick={() => {
-                  addHistory(tour);
+                onClick={async () => {
+                  setLoading(true);
+                  await addHistory(tour);
+                  window.location.href = tour.url;
                 }}
               >
-                {/* <a href={tour.url}>View Original Post!</a> */}
+                {loading ? "Loading..." : "View Original Post"}
               </button>
               <button onClick={next}>Itinerary</button>
             </div>

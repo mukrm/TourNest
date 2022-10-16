@@ -30,7 +30,7 @@ const Navbar = () => {
               </button>
             </Link>
           )}
-          {user && (
+          {user && window.location.pathname !== "/history" && (
             <Link to={"/history"}>
               <button className="navButton">History</button>
             </Link>

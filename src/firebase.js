@@ -211,15 +211,15 @@ const getHistory = async () => {
 const addHistory = async (tour) => {
   try {
     if (!auth.currentUser) return;
-    const docRef = addDoc(collection(db, "History"), {
+    const docRef = await addDoc(collection(db, "History"), {
       tour_id: tour.id,
       title: tour.title,
       price: tour.price,
       location: tour.location,
       url: tour.url,
       user: auth.currentUser.uid,
+      timestamp: new Date().getTime(),
     });
-    console.log("added to history", tour.id);
   } catch (err) {
     console.log(err);
   }

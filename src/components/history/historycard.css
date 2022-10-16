@@ -25,16 +25,23 @@
   all: unset;
   cursor: pointer;
   padding: 10px;
-  border: 2px solid black;
+  border: 2px solid rgb(0, 63, 126);
   border-radius: 3px;
   transition: all 150ms;
+  color: rgb(0, 63, 126);
 }
 
 .go-to-tour-buton:hover {
-  background-color: black;
+  background-color: rgb(0, 63, 126);
   color: white;
 }
 
 .go-to-tour-buton a {
   all: unset;
+}
+
+.last-visited-time {
+  color: rgb(108, 108, 108);
+  margin-top: 6px;
+  font-size: small;
 }

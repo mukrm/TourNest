@@ -36,6 +36,7 @@ export default function History() {
               city={item.location}
               price={item.price}
               url={item.url}
+              timestamp={item.timestamp}
             ></HistoryCard>
           ))}
       </div>

@@ -14,11 +14,12 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { format } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
-import { auth,getTours } from "../../firebase";
+import { auth, getTours } from "../../firebase";
 
-const Header = ({ type },{user}) => {
+const Header = ({ type }, { user }) => {
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
+  const [filter, setFilter] = useState(0);
   user = auth.currentUser;
   const [date, setDate] = useState([
     {
@@ -46,10 +47,8 @@ const Header = ({ type },{user}) => {
   };
 
   const handleSearch = () => {
-    if(!destination)
-      alert("Destination needed")
-    else
-      navigate("/hotels", { state: { destination, date, options } });
+    if (!destination) alert("Destination needed");
+    else navigate("/hotels", { state: { destination, date, options } });
   };
 
   return (
@@ -59,7 +58,7 @@ const Header = ({ type },{user}) => {
           type === "list" ? "headerContainer listMode" : "headerContainer"
         }
       >
-      {user && <div className="headerList">
+        {/* {user && <div className="headerList">
           <div className="headerListItem active">
             <FontAwesomeIcon icon={faBed} />
             <span>Home</span>
@@ -73,7 +72,7 @@ const Header = ({ type },{user}) => {
             <span>History</span>
           </div>
         </div>
-        }
+        } */}
         {type !== "list" && (
           <>
             <h1 className="headerTitle">
@@ -83,89 +82,148 @@ const Header = ({ type },{user}) => {
               Find the tour you're looking for – TourNest helps you find and
               create the perfect tour for you!
             </p>
-           {!user && <Link to={"/login"}> <button className="headerBtn">Sign in / Sign Up</button> </Link>}
+            {!user && (
+              <Link to={"/login"}>
+                {" "}
+                <button className="headerBtn">Sign in / Sign Up</button>{" "}
+              </Link>
+            )}
+
             <div className="headerSearch">
-              <div className="headerSearchItem">
-                <FontAwesomeIcon icon={faBed} className="headerIcon" />
-                <input
-                  type="text"
-                  placeholder="Where are you going?"
-                  className="headerSearchInput"
-                  onChange={(e) => setDestination(e.target.value)}
-                />
-              </div>
-              <div className="headerSearchItem">
-                <FontAwesomeIcon icon={faBed} className="headerIcon" />
-                <input
-                  type="text"
-                  placeholder="Departure?"
-                  className="headerSearchInput"
-                  
-                />
-              </div>
-              <div className="headerSearchItem">
-                <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" />
-                <span
-                  onClick={() => setOpenDate(!openDate)}
-                  className="headerSearchText"
-                >{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
-                  date[0].endDate,
-                  "MM/dd/yyyy"
-                )}`}</span>
-                {openDate && (
-                  <DateRange
-                    editableDateInputs={true}
-                    onChange={(item) => setDate([item.selection])}
-                    moveRangeOnFirstSelection={false}
-                    ranges={date}
-                    className="date"
-                    minDate={new Date()}
-                  />
-                )}
-              </div>
-              <div className="headerSearchItem">
               <select
-                  placeholder="Budget?"
-                  className="headerSearchInput"
-                >
-                  <option className="headerSearchInput">
-                    Select Budget
-                  </option>
-                  <option className="headerSearchInput">
-                    Luxury
-                  </option>
-                  <option className="headerSearchInput">
-                    Economy
-                  </option>
-                  <option className="headerSearchInput">
-                    Low
-                  </option>
+                defaultValue={0}
+                onChange={(e) => {
+                  setFilter(e.target.value);
+                }}
+                className="select-options"
+              >
+                <option value={0} disabled>
+                  Please select a tour type
+                </option>
+                <option value={"tour"}>Tour</option>
+                <option value={"customizedtour"}>Customized Tour</option>
+              </select>
+
+              {filter === 0 && (
+                <>
+                  <div style={{ color: "Black", width: "40%" }}>
+                    <p>Select a tour type</p>
+                  </div>
+                </>
+              )}
+              {filter === "tour" && (
+                <>
+                  <div className="headerSearchItem">
+                    <FontAwesomeIcon icon={faBed} className="headerIcon" />
+                    <input
+                      style={{ width: "100%" }}
+                      type="text"
+                      placeholder="Where are you going?"
+                      className="headerSearchInput"
+                      onChange={(e) => setDestination(e.target.value)}
+                    />
+                  </div>
+                  {/* <div className="headerSearchItem">
+                    <FontAwesomeIcon icon={faBed} className="headerIcon" />
+                    <input
+                      type="text"
+                      placeholder="Departure?"
+                      className="headerSearchInput"
+                    />
+                  </div>
+                  <div className="headerSearchItem">
+                    <FontAwesomeIcon
+                      icon={faCalendarDays}
+                      className="headerIcon"
+                    />
+                    <span
+                      onClick={() => setOpenDate(!openDate)}
+                      className="headerSearchText"
+                    >{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
+                      date[0].endDate,
+                      "MM/dd/yyyy"
+                    )}`}</span>
+                    {openDate && (
+                      <DateRange
+                        editableDateInputs={true}
+                        onChange={(item) => setDate([item.selection])}
+                        moveRangeOnFirstSelection={false}
+                        ranges={date}
+                        className="date"
+                        minDate={new Date()}
+                      />
+                    )}
+                  </div> */}
+                </>
+              )}
+              {filter == "customizedtour" && (
+                <>
+                  <div className="headerSearchItem">
+                    <FontAwesomeIcon icon={faBed} className="headerIcon" />
+                    <input
+                      type="text"
+                      placeholder="Where are you going?"
+                      className="headerSearchInput"
+                      onChange={(e) => setDestination(e.target.value)}
+                    />
+                  </div>
+                  <div className="headerSearchItem">
+                    <FontAwesomeIcon icon={faBed} className="headerIcon" />
+                    <input
+                      type="text"
+                      placeholder="Departure?"
+                      className="headerSearchInput"
+                    />
+                  </div>
+                  <div className="headerSearchItem">
+                    <FontAwesomeIcon
+                      icon={faCalendarDays}
+                      className="headerIcon"
+                    />
+                    <span
+                      onClick={() => setOpenDate(!openDate)}
+                      className="headerSearchText"
+                    >{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
+                      date[0].endDate,
+                      "MM/dd/yyyy"
+                    )}`}</span>
+                    {openDate && (
+                      <DateRange
+                        editableDateInputs={true}
+                        onChange={(item) => setDate([item.selection])}
+                        moveRangeOnFirstSelection={false}
+                        ranges={date}
+                        className="date"
+                        minDate={new Date()}
+                      />
+                    )}
+                  </div>
+                </>
+              )}
+
+              {/* <div className="headerSearchItem">
+                <select placeholder="Budget?" className="headerSearchInput">
+                  <option className="headerSearchInput">Select Budget</option>
+                  <option className="headerSearchInput">Luxury</option>
+                  <option className="headerSearchInput">Economy</option>
+                  <option className="headerSearchInput">Low</option>
                 </select>
               </div>
               <div className="headerSearchItem">
-              <select
-                  placeholder=""
-                  className="headerSearchInput"
-                >
-                  <option className="headerSearchInput">
-                    Select Services
-                  </option>
-                  <option className="headerSearchInput">
-                    Transport
-                  </option>
-                  <option className="headerSearchInput">
-                    Hotel
-                  </option>
-                  <option className="headerSearchInput">
-                    Guide
-                  </option>
+                <select placeholder="" className="headerSearchInput">
+                  <option className="headerSearchInput">Select Services</option>
+                  <option className="headerSearchInput">Transport</option>
+                  <option className="headerSearchInput">Hotel</option>
+                  <option className="headerSearchInput">Guide</option>
                 </select>
-              </div>
-              <div className="headerSearchItem">
-                <button className="headerBtn" onClick={handleSearch}>
-                  Search
-                </button>
-              </div>
+              </div> */}
+              {filter !== 0 && (
+                <div className="headerSearchItem">
+                  <button className="headerBtn" onClick={handleSearch}>
+                    Search
+                  </button>
+                </div>
+              )}
             </div>
           </>
         )}

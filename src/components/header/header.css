@@ -3,7 +3,7 @@
   color: white;
   display: flex;
   justify-content: center;
-  background-image: url('./bg.jpg');
+  background-image: url("./bg.jpg");
   position: relative;
 }
 
@@ -126,4 +126,14 @@
 
 .optionCounterButton:disabled {
   cursor: not-allowed;
+}
+
+.select-options {
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  background-color: transparent;
+  border: 1px solid black;
+  border-radius: 3px;
 }
