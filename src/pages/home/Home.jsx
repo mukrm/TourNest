@@ -9,18 +9,18 @@ import "./home.css";
 import { auth } from "../../firebase";
 const Home = () => {
   const [user, loading, error] = useAuthState(auth);
-  
+
   return (
     <div>
       <Navbar />
       <Header user />
       <div className="homeContainer">
-      <h1 className="homeTitle">Most Popular Locations</h1>
-        <Featured/>
+        <h1 className="homeTitle">Most Popular Locations</h1>
+        <Featured />
         <h1 className="homeTitle">Tours guests love</h1>
-        <FeaturedProperties/>
-        <MailList/>
-        <Footer/>
+        <FeaturedProperties />
+        <MailList />
+        <Footer />
       </div>
     </div>
   );

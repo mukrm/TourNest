@@ -37,6 +37,7 @@ const firebaseConfig = {
   appId: "1:953860944621:web:45d220afceb78f9c6f92e4",
   measurementId: "G-TGRVXYW7JT",
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -187,6 +188,43 @@ function getTours(destination) {
     });
 }
 
+const getHistory = async () => {
+  try {
+    if (!auth.currentUser) return;
+    const historyList = [];
+
+    const historyCol = collection(db, "History");
+    const historyDocs = await getDocs(historyCol);
+
+    historyDocs.forEach((doc) => {
+      let item = doc.data();
+
+      if (item.user === auth.currentUser.uid) historyList.push(item);
+    });
+
+    return historyList;
+  } catch (err) {
+    console.log("something went wrong");
+  }
+};
+
+const addHistory = async (tour) => {
+  try {
+    if (!auth.currentUser) return;
+    const docRef = addDoc(collection(db, "History"), {
+      tour_id: tour.id,
+      title: tour.title,
+      price: tour.price,
+      location: tour.location,
+      url: tour.url,
+      user: auth.currentUser.uid,
+    });
+    console.log("added to history", tour.id);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export {
   auth,
   db,
@@ -199,4 +237,6 @@ export {
   getDocs,
   collection,
   getTours,
+  getHistory,
+  addHistory,
 };

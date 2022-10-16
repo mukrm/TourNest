@@ -30,11 +30,9 @@ const Navbar = () => {
               </button>
             </Link>
           )}
-          {!user && (
+          {user && (
             <Link to={"/history"}>
-              <button className="navButton" onClick={logout}>
-                History
-              </button>
+              <button className="navButton">History</button>
             </Link>
           )}
         </div>
