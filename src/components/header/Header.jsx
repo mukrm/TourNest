@@ -15,8 +15,30 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { format } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, getTours } from "../../firebase";
+import Select from "react-select";
+
+const CustomSelect = ({ list, label, onChange }) => {
+  return (
+    <Select
+      onChange={onChange}
+      placeholder={label}
+      className="custom-select"
+      options={list}
+    ></Select>
+  );
+};
 
 const Header = ({ type }, { user }) => {
+  const cities = [
+    { value: "neelum", label: "Neelum" },
+    { value: "kumrat", label: "Kumrat" },
+  ];
+
+  const tourTypes = [
+    { value: "customizedtour", label: "Customized Tour" },
+    { value: "tour", label: "Tour" },
+  ];
+
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [filter, setFilter] = useState(0);
@@ -58,21 +80,6 @@ const Header = ({ type }, { user }) => {
           type === "list" ? "headerContainer listMode" : "headerContainer"
         }
       >
-        {/* {user && <div className="headerList">
-          <div className="headerListItem active">
-            <FontAwesomeIcon icon={faBed} />
-            <span>Home</span>
-          </div>
-          <div className="headerListItem">
-            <FontAwesomeIcon icon={faPlane} />
-            <span>Tours</span>
-          </div>
-          <div className="headerListItem">
-            <FontAwesomeIcon icon={faCar} />
-            <span>History</span>
-          </div>
-        </div>
-        } */}
         {type !== "list" && (
           <>
             <h1 className="headerTitle">
@@ -90,70 +97,47 @@ const Header = ({ type }, { user }) => {
             )}
 
             <div className="headerSearch">
-              <select
-                defaultValue={0}
+              <CustomSelect
                 onChange={(e) => {
-                  setFilter(e.target.value);
+                  setFilter(e.value);
                 }}
-                className="select-options"
-              >
-                <option value={0} disabled>
-                  Please select a tour type
-                </option>
-                <option value={"tour"}>Tour</option>
-                <option value={"customizedtour"}>Customized Tour</option>
-              </select>
-
+                label={"Tour Type"}
+                list={tourTypes}
+              ></CustomSelect>
               {filter === 0 && (
                 <>
                   <div style={{ color: "Black", width: "40%" }}>
-                    <p>Select a tour type</p>
+                    <p>Select a tour type to continue</p>
                   </div>
                 </>
               )}
+
               {filter === "tour" && (
                 <>
-                  <div className="headerSearchItem">
-                    <FontAwesomeIcon icon={faBed} className="headerIcon" />
-                    <input
-                      style={{ width: "100%" }}
-                      type="text"
-                      placeholder="Where are you going?"
-                      className="headerSearchInput"
-                      onChange={(e) => setDestination(e.target.value)}
+                  <CustomSelect
+                    label={"Where are you going?"}
+                    list={cities}
+                    onChange={(e) => {
+                      setDestination(e.value);
+                    }}
+                  ></CustomSelect>
+                  <span
+                    onClick={() => setOpenDate(!openDate)}
+                    className="headerSearchText"
+                  >{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
+                    date[0].endDate,
+                    "MM/dd/yyyy"
+                  )}`}</span>
+                  {openDate && (
+                    <DateRange
+                      editableDateInputs={true}
+                      onChange={(item) => setDate([item.selection])}
+                      moveRangeOnFirstSelection={false}
+                      ranges={date}
+                      className="date"
+                      minDate={new Date()}
                     />
-                  </div>
-                  {/* <div className="headerSearchItem">
-                    <FontAwesomeIcon icon={faBed} className="headerIcon" />
-                    <input
-                      type="text"
-                      placeholder="Departure?"
-                      className="headerSearchInput"
-                    />
-                  </div>
-                  <div className="headerSearchItem">
-                    <FontAwesomeIcon
-                      icon={faCalendarDays}
-                      className="headerIcon"
-                    />
-                    <span
-                      onClick={() => setOpenDate(!openDate)}
-                      className="headerSearchText"
-                    >{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
-                      date[0].endDate,
-                      "MM/dd/yyyy"
-                    )}`}</span>
-                    {openDate && (
-                      <DateRange
-                        editableDateInputs={true}
-                        onChange={(item) => setDate([item.selection])}
-                        moveRangeOnFirstSelection={false}
-                        ranges={date}
-                        className="date"
-                        minDate={new Date()}
-                      />
-                    )}
-                  </div> */}
+                  )}
                 </>
               )}
               {filter == "customizedtour" && (
@@ -201,22 +185,6 @@ const Header = ({ type }, { user }) => {
                 </>
               )}
 
-              {/* <div className="headerSearchItem">
-                <select placeholder="Budget?" className="headerSearchInput">
-                  <option className="headerSearchInput">Select Budget</option>
-                  <option className="headerSearchInput">Luxury</option>
-                  <option className="headerSearchInput">Economy</option>
-                  <option className="headerSearchInput">Low</option>
-                </select>
-              </div>
-              <div className="headerSearchItem">
-                <select placeholder="" className="headerSearchInput">
-                  <option className="headerSearchInput">Select Services</option>
-                  <option className="headerSearchInput">Transport</option>
-                  <option className="headerSearchInput">Hotel</option>
-                  <option className="headerSearchInput">Guide</option>
-                </select>
-              </div> */}
               {filter !== 0 && (
                 <div className="headerSearchItem">
                   <button className="headerBtn" onClick={handleSearch}>
