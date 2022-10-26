@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import HistoryCard from "../../components/history/HistoryCard";
 import Navbar from "../../components/navbar/Navbar";
-import { auth, getHistory } from "../../firebase";
+import { getHistory } from "../../firebase";
 import "./history.css";
 
 export default function History() {
@@ -29,16 +29,18 @@ export default function History() {
       <div id="history-page-container">
         <h2>Your last visited tours</h2>
         {data &&
-          data.map((item, index) => (
-            <HistoryCard
-              key={index}
-              title={item.title}
-              city={item.location}
-              price={item.price}
-              url={item.url}
-              timestamp={item.timestamp}
-            ></HistoryCard>
-          ))}
+          data
+            .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+            .map((item, index) => (
+              <HistoryCard
+                key={index}
+                title={item.title}
+                city={item.location}
+                price={item.price}
+                url={item.url}
+                timestamp={item.timestamp}
+              ></HistoryCard>
+            ))}
       </div>
     </>
   );

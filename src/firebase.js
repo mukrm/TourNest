@@ -211,6 +211,7 @@ const getHistory = async () => {
 const addHistory = async (tour) => {
   try {
     if (!auth.currentUser) return;
+    console.log(tour);
     const docRef = await addDoc(collection(db, "History"), {
       tour_id: tour.id,
       title: tour.title,
@@ -220,6 +221,7 @@ const addHistory = async (tour) => {
       user: auth.currentUser.uid,
       timestamp: new Date().getTime(),
     });
+    console.log(docRef);
   } catch (err) {
     console.log(err);
   }

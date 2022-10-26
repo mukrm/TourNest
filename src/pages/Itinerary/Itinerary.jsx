@@ -19,9 +19,6 @@ export default function Itinerary() {
         const res = await getDocs(collection(db, "Itinerary")).then(
           (QuerySnapshot) => {
             QuerySnapshot.forEach((doc) => {
-              console.log(
-                "Itinerary Tour : " + doc.data().tour + " == " + tour.id
-              );
               if (doc.data().tour == tour.id) {
                 let temp = {};
                 temp.id = doc.id;
@@ -44,14 +41,16 @@ export default function Itinerary() {
 
   return (
     <div>
-        <Navbar />
-        <Header type={"list"}/>
+      <Navbar />
+      <Header type={"list"} />
       <div className="div">
         <h1>Itinerary</h1>
         <div className="div">
-          {tours?.map((day) => (
-            <ItineraryDay day={day} key={day.day} />
-          ))}
+          {tours
+            ?.sort((a, b) => (a.day > b.day ? 1 : -1))
+            .map((day) => (
+              <ItineraryDay day={day} key={day.day} title={day.title} />
+            ))}
         </div>{" "}
       </div>
     </div>

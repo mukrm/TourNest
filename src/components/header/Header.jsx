@@ -32,6 +32,7 @@ const Header = ({ type }, { user }) => {
   const cities = [
     { value: "neelum", label: "Neelum" },
     { value: "kumrat", label: "Kumrat" },
+    { value: "hunza", label: "Hunza" },
   ];
 
   const tourTypes = [
@@ -86,7 +87,7 @@ const Header = ({ type }, { user }) => {
               Find your dream tour, with TourNest!
             </h1>
             <p className="headerDesc">
-              Find the tour you're looking for – TourNest helps you find and
+              Find the tour you're looking for - TourNest helps you find and
               create the perfect tour for you!
             </p>
             {!user && (

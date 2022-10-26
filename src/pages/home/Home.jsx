@@ -11,18 +11,34 @@ const Home = () => {
   const [user, loading, error] = useAuthState(auth);
 
   return (
-    <div>
-      <Navbar />
-      <Header user />
-      <div className="homeContainer">
-        <h1 className="homeTitle">Most Popular Locations</h1>
-        <Featured />
-        <h1 className="homeTitle">Tours guests love</h1>
-        <FeaturedProperties />
-        <MailList />
-        <Footer />
-      </div>
-    </div>
+    <>
+      {loading ? (
+        <div
+          style={{
+            width: "100%",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <div>
+          <Navbar />
+          <Header user />
+          <div className="homeContainer">
+            <h1 className="homeTitle">Most Popular Locations</h1>
+            <Featured />
+            <h1 className="homeTitle">Tours guests love</h1>
+            <FeaturedProperties />
+            <MailList />
+            <Footer />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -8,7 +8,6 @@ import { DateRange } from "react-date-range";
 import SearchItem from "../../components/searchItem/SearchItem";
 import { db, collection, getDocs } from "../../firebase";
 
-
 const List = () => {
   const location = useLocation();
   const [destination, setDestination] = useState(location.state.destination);
@@ -24,20 +23,23 @@ const List = () => {
           (QuerySnapshot) => {
             QuerySnapshot.forEach((doc) => {
               if (
-                doc.data().location.toLowerCase().trim() ==
-                destination.toLowerCase().trim()
+                doc
+                  .data()
+                  .location.toLowerCase()
+                  .trim()
+                  .includes(destination.toLowerCase().trim())
               ) {
-                let temp={}
-                temp.id=doc.id;
-                temp.title=doc.data().title;
-                temp.description=doc.data().description;
-                temp.short_description=doc.data().short_description;
-                temp.price=doc.data().price;
-                temp.image=doc.data().image;
-                temp.type=doc.data().type;
-                temp.url=doc.data().url;
-                temp.location=doc.data().location;
-                temp.days=doc.data().days;
+                let temp = {};
+                temp.id = doc.id;
+                temp.title = doc.data().title;
+                temp.description = doc.data().description;
+                temp.short_description = doc.data().short_description;
+                temp.price = doc.data().price;
+                temp.image = doc.data().image;
+                temp.type = doc.data().type;
+                temp.url = doc.data().url;
+                temp.location = doc.data().location;
+                temp.days = doc.data().days;
                 t.push(temp);
               }
             });
@@ -123,8 +125,8 @@ const List = () => {
             <button>Search</button>
           </div>
           <div className="listResult">
-            {tours?.map((tour) => (
-              <SearchItem tour={tour} key={tour.title} />
+            {tours?.map((tour, index) => (
+              <SearchItem tour={tour} key={index} />
             ))}
           </div>
         </div>

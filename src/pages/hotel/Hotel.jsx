@@ -12,15 +12,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { addHistory } from "../../firebase";
+
 const Hotel = () => {
   const location = useLocation();
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [tour, setTour] = useState(location.state.tour);
-  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   function next() {
     //alert(tour.title)
@@ -43,6 +42,8 @@ const Hotel = () => {
 
     setSlideNumber(newSlideNumber);
   };
+
+  window.scrollTo(0, 0);
 
   return (
     <div>
@@ -100,13 +101,11 @@ const Hotel = () => {
                 <b>{tour.price}</b> ({tour.days}) Days
               </h2>
               <button
-                onClick={async () => {
-                  setLoading(true);
-                  await addHistory(tour);
+                onClick={() => {
                   window.location.href = tour.url;
                 }}
               >
-                {loading ? "Loading..." : "View Original Post"}
+                Visit Original Tour
               </button>
               <button onClick={next}>Itinerary</button>
             </div>
