@@ -7,6 +7,7 @@ import MailList from "../../components/mailList/MailList";
 import Navbar from "../../components/navbar/Navbar";
 import "./home.css";
 import { auth } from "../../firebase";
+import { SearchBarMain } from "../../components/searchBarMain/SearchBarMain";
 const Home = () => {
   const [user, loading, error] = useAuthState(auth);
 
@@ -27,7 +28,8 @@ const Home = () => {
       ) : (
         <div>
           <Navbar />
-          <Header user />
+          {/* <Header user /> */}
+          <SearchBarMain />
           <div className="homeContainer">
             <h1 className="homeTitle">Most Popular Locations</h1>
             <Featured />
