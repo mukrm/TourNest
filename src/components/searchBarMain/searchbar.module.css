@@ -4,8 +4,9 @@
   padding: 9em 15em;
   background: url("https://wallpapercave.com/wp/STgHPst.jpg");
   background-position: 0px 0px;
-  background-size: 100% auto;
+  background-size: 100% 100vh;
   background-attachment: fixed;
+  min-height: 60vh;
 }
 
 .input {
@@ -16,6 +17,7 @@
 
 .form {
   width: 100%;
+  height: fit-content;
   background-color: white;
   padding: 3em 4em;
   position: relative;

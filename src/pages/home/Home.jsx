@@ -31,10 +31,10 @@ const Home = () => {
           {/* <Header user /> */}
           <SearchBarMain />
           <div className="homeContainer">
-            <h1 className="homeTitle">Most Popular Locations</h1>
+            {/* <h1 className="homeTitle">Most Popular Locations</h1>
             <Featured />
             <h1 className="homeTitle">Tours guests love</h1>
-            <FeaturedProperties />
+            <FeaturedProperties /> */}
             <MailList />
             <Footer />
           </div>
