@@ -8,6 +8,12 @@ import "./history.css";
 
 export default function History() {
   const [data, setData] = useState(null);
+  const [sortBy, setSortBy] = useState("time");
+
+  const changeSorting = () => {
+    if (sortBy === "time") setSortBy("alphabet");
+    else setSortBy("time");
+  };
 
   const getData = async () => {
     try {
@@ -27,10 +33,19 @@ export default function History() {
     <>
       <Navbar />
       <div id="history-page-container">
-        <h2>Your last visited tours</h2>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h2>Your last visited tours</h2>
+          <button onClick={changeSorting}>Sorted By: {sortBy}</button>
+        </div>
         {data &&
           data
-            .sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+            .sort((a, b) => {
+              if (sortBy === "time") {
+                return a.timestamp < b.timestamp ? 1 : -1;
+              } else if (sortBy === "alphabet") {
+                return a.location < b.location ? 1 : -1;
+              } else return null;
+            })
             .map((item, index) => (
               <HistoryCard
                 key={index}
