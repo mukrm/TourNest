@@ -8,11 +8,11 @@ import "./history.css";
 
 export default function History() {
   const [data, setData] = useState(null);
-  const [sortBy, setSortBy] = useState("time");
+  const [sortBy, setSortBy] = useState("timestamp");
 
   const changeSorting = () => {
-    if (sortBy === "time") setSortBy("alphabet");
-    else setSortBy("time");
+    if (sortBy === "timestamp") setSortBy("location");
+    else setSortBy("timestamp");
   };
 
   const getData = async () => {
@@ -40,11 +40,7 @@ export default function History() {
         {data &&
           data
             .sort((a, b) => {
-              if (sortBy === "time") {
-                return a.timestamp < b.timestamp ? 1 : -1;
-              } else if (sortBy === "alphabet") {
-                return a.location < b.location ? 1 : -1;
-              } else return null;
+              return a[sortBy] > b[sortBy] ? 1 : -1;
             })
             .map((item, index) => (
               <HistoryCard

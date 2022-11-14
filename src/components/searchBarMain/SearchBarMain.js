@@ -37,6 +37,7 @@ export const SearchBarMain = () => {
     { value: "neelum", label: "Neelum" },
     { value: "kumrat", label: "Kumrat" },
     { value: "hunza", label: "Hunza" },
+    { value: "karachi", label: "Karachi" },
   ];
 
   const handleSelect = (date) => {
@@ -47,9 +48,19 @@ export const SearchBarMain = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let type;
+
+    if (active === 0) type = "tour";
+    else if (active === 1) type = "hotel";
+
     if (location)
       navigate("/hotels", {
-        state: { destination: location, date: selectionRange, options: {} },
+        state: {
+          destination: location,
+          date: selectionRange,
+          options: {},
+          type: type,
+        },
       });
     else alert("Destination needed");
   };

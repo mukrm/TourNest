@@ -15,6 +15,8 @@ const List = () => {
   const [openDate, setOpenDate] = useState(false);
   const [tours, setTours] = useState([]);
   const [options, setOptions] = useState(location.state.options);
+  const [hotels, setHotels] = useState([]);
+
   useEffect(() => {
     async function getTours() {
       try {
@@ -50,7 +52,42 @@ const List = () => {
         console.log(err);
       }
     }
-    getTours();
+
+    async function getHotel() {
+      try {
+        let t = [];
+        const res = await getDocs(collection(db, "Hotels")).then(
+          (QuerySnapshot) => {
+            QuerySnapshot.forEach((doc) => {
+              if (
+                doc
+                  .data()
+                  .location.toLowerCase()
+                  .trim()
+                  .includes(destination.toLowerCase().trim())
+              ) {
+                let temp = {};
+                temp.id = doc.id;
+                temp.title = doc.data().title;
+                temp.price = doc.data().price;
+                temp.image = doc.data().img;
+                temp.type = doc.data().type;
+                temp.url = doc.data().link;
+                temp.location = doc.data().location;
+                t.push(temp);
+              }
+            });
+          }
+        );
+        setHotels(t);
+        console.log(t);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    if (location.state.type === "tour") getTours();
+    else if (location.state.type === "hotel") getHotel();
   }, []);
   return (
     <div>
@@ -125,9 +162,41 @@ const List = () => {
             <button>Search</button>
           </div>
           <div className="listResult">
-            {tours?.map((tour, index) => (
-              <SearchItem tour={tour} key={index} />
-            ))}
+            {location.state.type === "tour" &&
+              tours?.map((tour, index) => (
+                <SearchItem tour={tour} key={index} />
+              ))}
+            {location.state.type === "hotel" &&
+              hotels.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      border: "1px solid blue",
+                      borderRadius: "10px",
+                      margin: "20px 0px",
+                      padding: "10px 20px",
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: "3em",
+                    }}
+                    key={index}
+                  >
+                    <img
+                      alt={item.title}
+                      width={150}
+                      height={150}
+                      src={item.image}
+                    ></img>
+                    <div>
+                      <h3>{item.title}</h3>
+                      <h4>{item.price}</h4>
+                      <a rel="noreferrer" target="_blank" href={item.url}>
+                        Visit Original
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>
