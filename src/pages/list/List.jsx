@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItem from "../../components/searchItem/SearchItem";
 import { db, collection, getDocs } from "../../firebase";
+import { addHistory } from "../../firebase";
 
 const List = () => {
   const location = useLocation();
@@ -190,7 +191,9 @@ const List = () => {
                     <div>
                       <h3>{item.title}</h3>
                       <h4>{item.price}</h4>
-                      <a rel="noreferrer" target="_blank" href={item.url}>
+                      <a rel="noreferrer" target="_blank" href={item.url} onClick={async () => {
+              await addHistory(item);
+            }}>
                         Visit Original
                       </a>
                     </div>

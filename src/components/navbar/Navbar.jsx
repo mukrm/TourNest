@@ -1,7 +1,14 @@
 import "./navbar.css";
 import { Link } from "react-router-dom";
 import { auth, logout } from "../../firebase";
+
+import {Routes, Route, useNavigate} from 'react-router-dom';
+
 const Navbar = () => {
+
+  const navigate = useNavigate();
+
+
   const user = auth.currentUser;
   return (
     <div className="navbar">
@@ -35,6 +42,9 @@ const Navbar = () => {
               <button className="navButton">History</button>
             </Link>
           )}
+          
+              <button className="navButton" onClick={() => navigate(-1)}>Go Back</button>
+            
         </div>
       </div>
     </div>
