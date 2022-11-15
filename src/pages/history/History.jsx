@@ -40,7 +40,7 @@ export default function History() {
         {data &&
           data
             .sort((a, b) => {
-              return a[sortBy] > b[sortBy] ? 1 : -1;
+              return a[sortBy] < b[sortBy] ? 1 : -1;
             })
             .map((item, index) => (
               <HistoryCard
