@@ -30,6 +30,7 @@ const Navbar = () => {
               <button className="navButton">Login</button>
             </Link>
           )}
+          <button>Logged in as {user.email}</button>
           {user && (
             <Link to={"/login"}>
               <button className="navButton" onClick={logout}>
