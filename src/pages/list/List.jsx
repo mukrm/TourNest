@@ -17,6 +17,8 @@ const List = () => {
   const [tours, setTours] = useState([]);
   const [options, setOptions] = useState(location.state.options);
   const [hotels, setHotels] = useState([]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(1);
 
   useEffect(() => {
     async function getTours() {
@@ -81,7 +83,6 @@ const List = () => {
           }
         );
         setHotels(t);
-        console.log(t);
       } catch (err) {
         console.log(err);
       }
@@ -123,15 +124,33 @@ const List = () => {
                   <span className="lsOptionText">
                     Min price <small>per night</small>
                   </span>
-                  <input type="number" className="lsOptionInput" />
+                  <input
+                    value={minPrice}
+                    onChange={(e) => {
+                      if (e.target.value.length > 5) return;
+                      if (parseInt(maxPrice) <= parseInt(e.target.value))
+                        return;
+                      setMinPrice(e.target.value > 0 ? e.target.value : 0);
+                    }}
+                    type="number"
+                    className="lsOptionInput"
+                  />
                 </div>
                 <div className="lsOptionItem">
                   <span className="lsOptionText">
                     Max price <small>per night</small>
                   </span>
-                  <input type="number" className="lsOptionInput" />
+                  <input
+                    value={maxPrice}
+                    onChange={(e) => {
+                      if (e.target.value.length > 5) return;
+                      setMaxPrice(e.target.value > 0 ? e.target.value : 0);
+                    }}
+                    type="number"
+                    className="lsOptionInput"
+                  />
                 </div>
-                <div className="lsOptionItem">
+                {/* <div className="lsOptionItem">
                   <span className="lsOptionText">Adult</span>
                   <input
                     type="number"
@@ -157,49 +176,67 @@ const List = () => {
                     className="lsOptionInput"
                     placeholder={options.room}
                   />
-                </div>
+                </div> */}
               </div>
             </div>
-            <button>Search</button>
           </div>
           <div className="listResult">
             {location.state.type === "tour" &&
-              tours?.map((tour, index) => (
-                <SearchItem tour={tour} key={index} />
-              ))}
+              tours
+                ?.filter((item) => {
+                  if (parseInt(maxPrice) === 1) return true;
+
+                  return (
+                    item.price <= parseInt(maxPrice) && item.price > minPrice
+                  );
+                })
+                .map((tour, index) => <SearchItem tour={tour} key={index} />)}
             {location.state.type === "hotel" &&
-              hotels.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      border: "1px solid blue",
-                      borderRadius: "10px",
-                      margin: "20px 0px",
-                      padding: "10px 20px",
-                      display: "flex",
-                      flexDirection: "row",
-                      gap: "3em",
-                    }}
-                    key={index}
-                  >
-                    <img
-                      alt={item.title}
-                      width={150}
-                      height={150}
-                      src={item.image}
-                    ></img>
-                    <div>
-                      <h3>{item.title}</h3>
-                      <h4>{item.price}</h4>
-                      <a rel="noreferrer" target="_blank" href={item.url} onClick={async () => {
-              await addHistory(item);
-            }}>
-                        Visit Original
-                      </a>
+              hotels
+                ?.filter((item) => {
+                  if (parseInt(maxPrice) === 1) return true;
+
+                  return (
+                    item.price <= parseInt(maxPrice) && item.price > minPrice
+                  );
+                })
+                .hotels.map((item, index) => {
+                  return (
+                    <div
+                      style={{
+                        border: "1px solid blue",
+                        borderRadius: "10px",
+                        margin: "20px 0px",
+                        padding: "10px 20px",
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "3em",
+                      }}
+                      key={index}
+                    >
+                      <img
+                        alt={item.title}
+                        width={150}
+                        height={150}
+                        src={item.image}
+                      ></img>
+                      <div>
+                        <h3>{item.title}</h3>
+                        <h4>{item.price}</h4>
+                        <a
+                          rel="noreferrer"
+                          target="_blank"
+                          href={item.url}
+                          onClick={async () => {
+                            await addHistory(item);
+                          }}
+                        >
+                          Visit Original
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
           </div>
         </div>
       </div>

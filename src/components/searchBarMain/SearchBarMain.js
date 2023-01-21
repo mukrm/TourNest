@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 export const SearchBarMain = () => {
   const navigate = useNavigate();
+  const [show, setShow] = useState(false);
   const [selectionRange, setSelectionRange] = useState([
     {
       startDate: new Date(),
@@ -67,6 +68,9 @@ export const SearchBarMain = () => {
 
   return (
     <div id={`${styles.background}`}>
+      {show && (
+        <div onClick={() => setShow(false)} id={`${styles.closeCalendarBg}`} />
+      )}
       <form className={styles.form} onSubmit={handleSubmit}>
         <TabArea active={active} changeTab={changeTab} />
         <p className={styles.labelText}>Tour/Location</p>
@@ -80,6 +84,8 @@ export const SearchBarMain = () => {
           />
           {active === 1 && (
             <DateRangePicker
+              show={show}
+              setShow={setShow}
               start={start}
               end={end}
               selectionRange={selectionRange}
@@ -158,9 +164,14 @@ const Tab = ({ children, onClick, active }) => {
   );
 };
 
-const DateRangePicker = ({ start, end, handleSelect, selectionRange }) => {
-  const [show, setShow] = useState(false);
-
+const DateRangePicker = ({
+  show,
+  setShow,
+  start,
+  end,
+  handleSelect,
+  selectionRange,
+}) => {
   return (
     <div className={styles.dateRangeContainer}>
       <div
@@ -192,6 +203,7 @@ const DateRangePicker = ({ start, end, handleSelect, selectionRange }) => {
       {show && (
         <div className={styles.calenderContainer}>
           <MyCalender
+            minDate={new Date()}
             handleSelect={handleSelect}
             selectionRange={selectionRange}
           />

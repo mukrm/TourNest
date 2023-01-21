@@ -23,6 +23,7 @@ const ItineraryDay = (props) => {
           }
         );
         setTours(t);
+        console.log(t);
       } catch (err) {
         console.log(err);
       }
@@ -41,12 +42,12 @@ const ItineraryDay = (props) => {
         )}
         <div>
           <ul>
-            {tours
+            {/* {tours
               ?.sort((a, b) => (a.itemno > b.itemno ? 1 : -1))
               .map((item, index) => {
                 if (!image) setImage(item.image);
                 return <ItineraryItem item={item} key={item.itemno} />;
-              })}
+              })} */}
           </ul>
         </div>
       </div>

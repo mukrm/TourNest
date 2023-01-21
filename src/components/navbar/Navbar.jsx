@@ -2,12 +2,10 @@ import "./navbar.css";
 import { Link } from "react-router-dom";
 import { auth, logout } from "../../firebase";
 
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-
   const navigate = useNavigate();
-
 
   const user = auth.currentUser;
   return (
@@ -30,7 +28,7 @@ const Navbar = () => {
               <button className="navButton">Login</button>
             </Link>
           )}
-          <button>Logged in as {user.email}</button>
+          {user && <button>Logged in as {user.email}</button>}
           {user && (
             <Link to={"/login"}>
               <button className="navButton" onClick={logout}>
@@ -43,9 +41,10 @@ const Navbar = () => {
               <button className="navButton">History</button>
             </Link>
           )}
-          
-              <button className="navButton" onClick={() => navigate(-1)}>Go Back</button>
-            
+
+          <button className="navButton" onClick={() => navigate(-1)}>
+            Go Back
+          </button>
         </div>
       </div>
     </div>
