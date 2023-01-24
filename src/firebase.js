@@ -99,6 +99,8 @@ const registerWithEmailAndPassword = async (
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log("Upload is " + progress + "% done");
+
+          /* eslint-disable */
           switch (snapshot.state) {
             case "paused":
               console.log("Upload is paused");
@@ -172,7 +174,7 @@ function getTours(destination) {
       let tours = [];
       QuerySnapshot.forEach((doc) => {
         if (
-          doc.data().location.toLowerCase().trim() ==
+          doc.data().location.toLowerCase().trim() ===
           destination.toLowerCase().trim()
         ) {
           doc.data().id = doc.id;
@@ -211,7 +213,7 @@ const getHistory = async () => {
 const addHistory = async (tour) => {
   try {
     if (!auth.currentUser) return;
-    console.log(tour);
+
     const docRef = await addDoc(collection(db, "History"), {
       tour_id: tour.id,
       title: tour.title,
@@ -230,6 +232,7 @@ const addHistory = async (tour) => {
 export {
   auth,
   db,
+  query,
   signInWithGoogle,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
@@ -241,4 +244,5 @@ export {
   getTours,
   getHistory,
   addHistory,
+  where,
 };

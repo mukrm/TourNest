@@ -3,44 +3,42 @@ import { useState } from "react";
 import { useEffect } from "react";
 import ItineraryDay from "../../components/ItineraryDay/ItineraryDay";
 import "../Itinerary/itinerary.css";
-import { getDocs, collection, db } from "../../firebase";
+import { getDocs, collection, db, query, where } from "../../firebase";
 import { useLocation } from "react-router-dom";
 import Navbar from "../../components/navbar/Navbar";
 import Header from "../../components/header/Header";
 
 export default function Itinerary() {
   const location = useLocation();
-  const [tour, setTour] = useState(location.state.tour);
-  const [tours, setTours] = useState();
-
-  console.log(tour);
+  const [itineraries, setItineraries] = useState([]);
 
   useEffect(() => {
-    async function getTours() {
+    async function getItineraries() {
       try {
-        let t = [];
-        const res = await getDocs(collection(db, "Itinerary")).then(
-          (QuerySnapshot) => {
-            QuerySnapshot.forEach((doc) => {
-              if (doc.data().tour == tour.id) {
-                let temp = {};
-                temp.id = doc.id;
-                temp.title = doc.data().title;
-                temp.day = doc.data().day;
-                temp.description = doc.data().description;
+        let it = [];
 
-                t.push(temp);
-              }
-            });
-          }
+        const itenerariesRef = collection(db, "Itinerary");
+
+        const q = query(
+          itenerariesRef,
+          where("tour", "==", location.state.tour.id)
         );
-        console.log(t);
-        setTours(t);
+
+        const res = await getDocs(q);
+
+        res.forEach((doc) => {
+          it.push({ id: doc.id, ...doc.data() });
+        });
+
+        setItineraries(it.sort((a, b) => (a.day > b.day ? 1 : -1)));
       } catch (err) {
         console.log(err);
       }
     }
-    getTours();
+
+    getItineraries();
+
+    /* eslint-disable */
   }, []);
 
   return (
@@ -50,9 +48,10 @@ export default function Itinerary() {
       <div className="div">
         <h1>Itinerary</h1>
         <div className="div">
-          {tours?.map((day) => (
-            <ItineraryDay day={day} key={day.day} title={day.title} />
-          ))}
+          {itineraries &&
+            itineraries.map((item) => (
+              <ItineraryDay item={item} key={item.id} />
+            ))}
         </div>
       </div>
     </div>

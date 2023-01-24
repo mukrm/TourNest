@@ -11,86 +11,94 @@ import { addHistory } from "../../firebase";
 
 const List = () => {
   const location = useLocation();
-  const [destination, setDestination] = useState(location.state.destination);
   const [date, setDate] = useState(location.state.date);
   const [openDate, setOpenDate] = useState(false);
   const [tours, setTours] = useState([]);
-  const [options, setOptions] = useState(location.state.options);
   const [hotels, setHotels] = useState([]);
+  const [filteredResults, setFilteredResults] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function getTours() {
       try {
-        let t = [];
-        const res = await getDocs(collection(db, "Tours")).then(
-          (QuerySnapshot) => {
-            QuerySnapshot.forEach((doc) => {
-              if (
-                doc
-                  .data()
-                  .location.toLowerCase()
-                  .trim()
-                  .includes(destination.toLowerCase().trim())
-              ) {
-                let temp = {};
-                temp.id = doc.id;
-                temp.title = doc.data().title;
-                temp.description = doc.data().description;
-                temp.short_description = doc.data().short_description;
-                temp.price = doc.data().price;
-                temp.image = doc.data().image;
-                temp.type = doc.data().type;
-                temp.url = doc.data().url;
-                temp.location = doc.data().location;
-                temp.days = doc.data().days;
-                t.push(temp);
-              }
-            });
-          }
+        let tours = [];
+
+        const res = await getDocs(collection(db, "Tours"));
+
+        res.forEach((doc) => tours.push({ id: doc.id, ...doc.data() }));
+
+        if (tours.length <= 0) return setError("No tours found");
+
+        const filtered = tours.filter((item) =>
+          item.location
+            .toLowerCase()
+            .trim()
+            .includes(location.state.destination.toLowerCase().trim())
         );
-        setTours(t);
+
+        setTours(filtered);
+        setFilteredResults(filtered);
       } catch (err) {
         console.log(err);
+        setError("There was a problem fetching data");
       }
     }
 
     async function getHotel() {
       try {
-        let t = [];
-        const res = await getDocs(collection(db, "Hotels")).then(
-          (QuerySnapshot) => {
-            QuerySnapshot.forEach((doc) => {
-              if (
-                doc
-                  .data()
-                  .location.toLowerCase()
-                  .trim()
-                  .includes(destination.toLowerCase().trim())
-              ) {
-                let temp = {};
-                temp.id = doc.id;
-                temp.title = doc.data().title;
-                temp.price = doc.data().price;
-                temp.image = doc.data().img;
-                temp.type = doc.data().type;
-                temp.url = doc.data().link;
-                temp.location = doc.data().location;
-                t.push(temp);
-              }
-            });
-          }
+        let hotels = [];
+
+        const res = await getDocs(collection(db, "Hotels"));
+
+        res.forEach((doc) => hotels.push({ id: doc.id, ...doc.data() }));
+
+        if (hotels.length <= 0) return setError("No hotels found");
+
+        const filtered = hotels.filter((item) =>
+          item.location
+            .toLowerCase()
+            .trim()
+            .includes(location.state.destination.toLowerCase().trim())
         );
-        setHotels(t);
+
+        setHotels(filtered);
+        setFilteredResults(filtered);
       } catch (err) {
         console.log(err);
+        setError("There was a problem fetching data");
       }
     }
 
     if (location.state.type === "tour") getTours();
     else if (location.state.type === "hotel") getHotel();
+
+    /* eslint-disable */
   }, []);
+
+  function filterResults() {
+    const list = location.state.type === "hotel" ? [...hotels] : [...tours];
+
+    const filteredList = list.filter((item) => {
+      var res = item.price.replace(/\D/g, "");
+
+      if (parseInt(maxPrice) === 1) return true;
+
+      console.log(
+        parseInt(res) <= parseInt(maxPrice) &&
+          parseInt(res) > parseInt(minPrice)
+      );
+
+      return (
+        parseInt(res) <= parseInt(maxPrice) &&
+        parseInt(res) > parseInt(minPrice)
+      );
+    });
+
+    setFilteredResults(filteredList);
+  }
+
   return (
     <div>
       <Navbar />
@@ -101,7 +109,7 @@ const List = () => {
             <h1 className="lsTitle">Search</h1>
             <div className="lsItem">
               <label>Destination</label>
-              <input placeholder={destination} type="text" />
+              <input placeholder={location.state.destination} type="text" />
             </div>
             <div className="lsItem">
               <label>Check-in & Check-out Date</label>
@@ -144,7 +152,7 @@ const List = () => {
                     value={maxPrice}
                     onChange={(e) => {
                       if (e.target.value.length > 5) return;
-                      setMaxPrice(e.target.value > 0 ? e.target.value : 0);
+                      setMaxPrice(e.target.value > 0 ? e.target.value : 1);
                     }}
                     type="number"
                     className="lsOptionInput"
@@ -177,66 +185,38 @@ const List = () => {
                     placeholder={options.room}
                   />
                 </div> */}
+                <button
+                  onClick={filterResults}
+                  style={{
+                    width: "100%",
+                    background: "#0071c2",
+                    borderRadius: "5px",
+                    border: "none",
+                    color: "white",
+                    padding: "5px 10px",
+                    marginTop: "10px",
+                  }}
+                >
+                  Search
+                </button>
               </div>
             </div>
           </div>
           <div className="listResult">
+            <div style={{ fontWeight: "bold", color: "red", fontSize: "24px" }}>
+              {error !== "" && <p>{error}</p>}
+            </div>
             {location.state.type === "tour" &&
-              tours
-                ?.filter((item) => {
-                  if (parseInt(maxPrice) === 1) return true;
+              tours &&
+              filteredResults.map((tour, index) => (
+                <SearchItem tour={tour} key={index} />
+              ))}
 
-                  return (
-                    item.price <= parseInt(maxPrice) && item.price > minPrice
-                  );
-                })
-                .map((tour, index) => <SearchItem tour={tour} key={index} />)}
             {location.state.type === "hotel" &&
-              hotels
-                ?.filter((item) => {
-                  if (parseInt(maxPrice) === 1) return true;
-
-                  return (
-                    item.price <= parseInt(maxPrice) && item.price > minPrice
-                  );
-                })
-                .hotels.map((item, index) => {
-                  return (
-                    <div
-                      style={{
-                        border: "1px solid blue",
-                        borderRadius: "10px",
-                        margin: "20px 0px",
-                        padding: "10px 20px",
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "3em",
-                      }}
-                      key={index}
-                    >
-                      <img
-                        alt={item.title}
-                        width={150}
-                        height={150}
-                        src={item.image}
-                      ></img>
-                      <div>
-                        <h3>{item.title}</h3>
-                        <h4>{item.price}</h4>
-                        <a
-                          rel="noreferrer"
-                          target="_blank"
-                          href={item.url}
-                          onClick={async () => {
-                            await addHistory(item);
-                          }}
-                        >
-                          Visit Original
-                        </a>
-                      </div>
-                    </div>
-                  );
-                })}
+              hotels &&
+              filteredResults.map((item, index) => (
+                <HotelItem item={item} key={index} />
+              ))}
           </div>
         </div>
       </div>
@@ -245,3 +225,75 @@ const List = () => {
 };
 
 export default List;
+
+const HotelItem = ({ item }) => {
+  return (
+    <div
+      style={{
+        border: "1px solid lightgray",
+        borderRadius: "5px",
+        margin: "20px 0px",
+        padding: "10px",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        overflow: "hidden",
+        gap: "20px",
+      }}
+    >
+      <img
+        alt={item.title}
+        src={item.img}
+        style={{
+          objectFit: "cover",
+          width: "200px",
+          height: "200px",
+        }}
+      ></img>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
+          <h1 style={{ color: "#0071c2", fontSize: "20px " }}>{item.title}</h1>
+          <p style={{ fontSize: "12px", fontWeight: "bold" }}>
+            {item.location}
+          </p>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "end",
+            flexDirection: "column",
+            gap: "5px",
+          }}
+        >
+          <p style={{ fontSize: "24px", lineBreak: "revert" }}>{item.price}</p>
+          <p style={{ fontSize: "12px", color: "gray" }}>Approximately</p>
+          <button
+            style={{
+              backgroundColor: "#0071c2",
+              color: "white",
+              fontWeight: "bold",
+              padding: "10px 5px",
+              border: "none",
+              borderRadius: "5px",
+              width: "100%",
+              textAlign: "center",
+              cursor: "pointer",
+            }}
+            onClick={async () => {
+              await addHistory(item);
+              window.open(item.link, "__blank");
+            }}
+          >
+            Visit Original
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

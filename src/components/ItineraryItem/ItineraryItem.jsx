@@ -1,10 +1,13 @@
+import { useEffect } from "react";
 import "./itineraryitem.css";
-const ItineraryItem = (props) => {
-  const item = props.item;
-  let img = false;
-  if (item.image != "null") {
-    img = true;
-  }
+
+const ItineraryItem = ({ item, setImage }) => {
+  useEffect(() => {
+    if (item.image !== "") setImage(item.image);
+
+    /* eslint-disable */
+  }, []);
+
   return (
     <li>
       <p className="p">{item.description}</p>

@@ -2,12 +2,13 @@ import "./navbar.css";
 import { Link } from "react-router-dom";
 import { auth, logout } from "../../firebase";
 
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
   const user = auth.currentUser;
+
   return (
     <div className="navbar">
       <div className="navContainer">
