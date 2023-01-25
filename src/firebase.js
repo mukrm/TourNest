@@ -219,7 +219,7 @@ const addHistory = async (tour) => {
       title: tour.title,
       price: tour.price,
       location: tour.location,
-      url: tour.url,
+      url: tour.url || tour.link,
       user: auth.currentUser.uid,
       timestamp: new Date().getTime(),
     });

@@ -289,11 +289,10 @@ const HotelItem = ({ item }) => {
             }}
             onClick={async () => {
               await addHistory(item);
-              // window.open(item.link, "__blank");
               router(`/hotel/${item.id}`);
             }}
           >
-            Visit Original
+            See availability
           </button>
         </div>
       </div>

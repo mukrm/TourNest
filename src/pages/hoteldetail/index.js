@@ -30,6 +30,7 @@ export default function HotelDetail() {
             minHeight: "80vh",
             padding: "30px 200px",
             display: "grid",
+            gap: "30px",
             gridTemplateColumns: "1fr 1fr",
           }}
         >
