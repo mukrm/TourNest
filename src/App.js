@@ -7,6 +7,7 @@ import Register from "./pages/register/Register";
 import Reset from "./pages/reset/Reset";
 import Itinerary from "./pages/Itinerary/Itinerary";
 import History from "./pages/history/History";
+import HotelDetail from "./pages/hoteldetail";
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ function App() {
         <Route path="/hotels/:id" element={<Hotel />} />
         <Route path="/itinerary/" element={<Itinerary />} />
         <Route path="/history/" element={<History />} />
+        <Route path="/hotel/:id" element={<HotelDetail />} />
       </Routes>
     </BrowserRouter>
   );

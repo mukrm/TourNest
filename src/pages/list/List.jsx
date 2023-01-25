@@ -1,7 +1,7 @@
 import "./list.css";
 import Navbar from "../../components/navbar/Navbar";
 import Header from "../../components/header/Header";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
@@ -227,6 +227,8 @@ const List = () => {
 export default List;
 
 const HotelItem = ({ item }) => {
+  const router = useNavigate();
+
   return (
     <div
       style={{
@@ -287,7 +289,8 @@ const HotelItem = ({ item }) => {
             }}
             onClick={async () => {
               await addHistory(item);
-              window.open(item.link, "__blank");
+              // window.open(item.link, "__blank");
+              router(`/hotel/${item.id}`);
             }}
           >
             Visit Original
