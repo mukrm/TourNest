@@ -23,6 +23,8 @@ const List = () => {
     try {
       setError("");
 
+      if (place.length <= 0) return setError("Search is empty");
+
       let data = [];
 
       let collectionName;
@@ -34,8 +36,6 @@ const List = () => {
       const res = await getDocs(collection(db, collectionName));
 
       res.forEach((doc) => data.push({ id: doc.id, ...doc.data() }));
-
-      if (data.length <= 0) return setError(`No ${collectionName} Found`);
 
       const filteredByPlace = data.filter((item) =>
         item.location.toLowerCase().trim().includes(place.toLowerCase().trim())
@@ -51,6 +51,9 @@ const List = () => {
           parseInt(res) > parseInt(minPrice)
         );
       });
+
+      if (filteredByPrice.length <= 0)
+        return setError(`No ${collectionName} Found`);
 
       setData(filteredByPrice);
     } catch (err) {
