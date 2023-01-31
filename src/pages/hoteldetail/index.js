@@ -27,27 +27,31 @@ export default function HotelDetail() {
       {data && (
         <div
           style={{
-            minHeight: "80vh",
+            minHeight: "",
             padding: "30px 200px",
-            display: "grid",
-            gap: "30px",
-            gridTemplateColumns: "1fr 1fr",
           }}
         >
-          <div>
-            <h1 style={{ fontSize: "24px" }}>{data.title}</h1>
-            <span
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                fontSize: "smaller",
-                color: "gray",
-              }}
-            >
-              <MdLocationOn color="black" />
-              {data.location}
-            </span>
+          <h1 style={{ fontSize: "24px" }}>{data.title}</h1>
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontSize: "smaller",
+              color: "gray",
+              marginBottom: "20px",
+            }}
+          >
+            <MdLocationOn color="black" />
+            {data.location}
+          </span>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "30px",
+            }}
+          >
             <div>
               <img
                 alt={data.title}
@@ -55,48 +59,58 @@ export default function HotelDetail() {
                 style={{ width: "600px", height: "400px", objectFit: "cover" }}
               ></img>
             </div>
-          </div>
-          <div></div>
-          <div></div>
-          <div
-            style={{
-              justifySelf: "center",
-              background: "#ebf3ff",
-              padding: "20px 40px",
-            }}
-          >
-            <h2 style={{ textAlign: "center", color: "gray" }}>{data.title}</h2>
-            <h1 style={{ textAlign: "center", marginTop: "20px" }}>
-              {data.price}
-              <span
-                style={{
-                  fontSize: "20px",
-                  color: "gray",
-                  fontWeight: "normal",
-                }}
-              >
-                /night
-              </span>
-            </h1>
-            <button
+            <div
               style={{
-                backgroundColor: "#0071c2",
-                color: "white",
-                fontWeight: "bold",
-                padding: "10px 5px",
-                border: "none",
-                borderRadius: "5px",
-                width: "100%",
-                textAlign: "center",
-                cursor: "pointer",
-                marginTop: "40px",
-              }}
-              onClick={async () => {
-                window.location.href = data.link;
+                justifySelf: "center",
+                background: "#ebf3ff",
+                padding: "20px 40px",
               }}
             >
-              Visit Original
-            </button>
+              <div
+                style={{
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <h2 style={{ textAlign: "center", color: "gray" }}>
+                  {data.title}
+                </h2>
+                <h1 style={{ textAlign: "center", marginTop: "20px" }}>
+                  {data.price}
+                  <span
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      fontWeight: "normal",
+                    }}
+                  >
+                    /night
+                  </span>
+                </h1>
+                <button
+                  style={{
+                    backgroundColor: "#0071c2",
+                    color: "white",
+                    fontWeight: "bold",
+                    padding: "10px 5px",
+                    border: "none",
+                    borderRadius: "5px",
+                    width: "100%",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    marginTop: "40px",
+                  }}
+                  onClick={async () => {
+                    window.location.href = data.link;
+                  }}
+                >
+                  Visit Original
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
