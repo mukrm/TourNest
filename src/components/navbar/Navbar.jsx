@@ -37,12 +37,13 @@ const Navbar = () => {
   }, [user]);
 
   return (
-    <div className="navbar">
+    <div className="navbar" style={{ padding: "6px 0px" }}>
       <div className="navContainer">
         <Link to="/">
-          <span className="logo" style={{ color: "skyblue" }}>
-            Tour<span style={{ color: "white" }}>Nest</span>
-          </span>
+          <img
+            style={{ width: "auto", height: 50, objectFit: "contain" }}
+            src="logo.PNG"
+          />
         </Link>
         <div className="navItems">
           {!user && (

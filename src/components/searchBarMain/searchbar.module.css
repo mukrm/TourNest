@@ -121,6 +121,7 @@
   user-select: none;
   cursor: pointer;
   gap: 2em;
+  min-width: fit-content;
 }
 
 .dateInput p:nth-child(1) {
